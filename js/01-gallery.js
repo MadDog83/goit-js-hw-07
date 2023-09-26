@@ -66,5 +66,5 @@ window.addEventListener("keydown", event => {
     instance.close();
   }
 });
-
+console.log(basicLightbox);
 console.log(galleryItems);
