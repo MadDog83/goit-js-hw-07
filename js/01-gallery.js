@@ -35,13 +35,16 @@ galleryList.addEventListener('click', event => {
 
   instance.show();
 
-  // Закриття модального вікна після натискання клавіші Escape
-  window.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      instance.close();
-      window.removeEventListener('keydown', event);
-    }
-  });
+ // Функція для закриття модального вікна
+ const closeOnEscape = event => {
+  if (event.key === 'Escape') {
+    instance.close();
+    window.removeEventListener('keydown', closeOnEscape);
+  }
+};
+
+// Додавання слухача подій для закриття модального вікна
+window.addEventListener('keydown', closeOnEscape);
 });
 
 console.log(basicLightbox);
