@@ -20,31 +20,31 @@ const galleryMarkup = galleryItems.map(item => {
 // Додавання розмітки до списку галереї
 galleryList.innerHTML = galleryMarkup;
 
-// Додавання слухача подій для відкриття модального вікна
-galleryList.addEventListener('click', event => {
-  event.preventDefault();
+let instance; // Оголошення змінної instance
 
-  if (event.target.nodeName !== 'IMG') {
-    return;
-  }
-
-  const largeImageURL = event.target.dataset.source;
-  const instance = basicLightbox.create(`
-    <img src="${largeImageURL}" width="800" height="600">
-  `);
-
-  instance.show();
-
- // Функція для закриття модального вікна
- const closeOnEscape = event => {
+// Функція для закриття модального вікна
+const closeOnEscape = event => {
   if (event.key === 'Escape') {
     instance.close();
     window.removeEventListener('keydown', closeOnEscape);
   }
 };
 
-// Додавання слухача подій для закриття модального вікна
-window.addEventListener('keydown', closeOnEscape);
+// Додавання слухача подій для відкриття модального вікна
+galleryList.addEventListener('click', event => {
+  event.preventDefault();
+
+  if (event.target.nodeName !== 'IMG') return;
+
+  const largeImageURL = event.target.dataset.source;
+  instance = basicLightbox.create(`
+    <img src="${largeImageURL}" width="800" height="600">
+  `, {
+    onShow: () => window.addEventListener('keydown', closeOnEscape),
+    onClose: () => window.removeEventListener('keydown', closeOnEscape)
+  });
+
+  instance.show();
 });
 
 console.log(basicLightbox);
